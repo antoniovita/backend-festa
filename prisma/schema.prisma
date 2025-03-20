@@ -14,6 +14,7 @@ model User {
   type     String   // owner ou user
   phone    String?
   name     String
+  imgUrl   String?
 
   events   Event[]  @relation("EventOwner")
   tickets  Ticket[]
@@ -28,12 +29,11 @@ model Event {
   price       Float
   quantity    Int      // quantidade total de ingressos
   ownerId     String
+  imgUrl      String
   owner       User     @relation("EventOwner", fields: [ownerId], references: [id])
   
   tickets     Ticket[]
   payments    Payment[]
-
-  @@unique([id, quantity]) 
 }
 
 model Ticket {
