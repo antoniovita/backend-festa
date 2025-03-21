@@ -114,3 +114,6 @@ influencer:
 1- mariana collyer
 2- antonella braga
 3- duque maite?
+
+type: private => pix
+type: public => pix or card
