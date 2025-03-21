@@ -5,8 +5,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.2",
+    "oauth2": "^0.0.1",
     "prisma": "^6.5.0"
   },
   "devDependencies": {
@@ -20,12 +20,11 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2"
   },
-  
   "scripts": {
-  "dev": "nodemon src/server.ts",
-  "build": "tsc",
-  "start": "node dist/server.js",
-  "prisma:migrate": "npx prisma migrate dev",
-  "prisma:generate": "npx prisma generate"
-}
+    "dev": "nodemon src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "prisma:migrate": "npx prisma migrate dev",
+    "prisma:generate": "npx prisma generate"
+  }
 }

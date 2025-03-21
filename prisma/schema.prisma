@@ -13,6 +13,7 @@ model User {
   password String
   type     String   // owner ou user
   phone    String?
+  username String   @unique
   name     String
   imgUrl   String?
 
@@ -24,6 +25,7 @@ model User {
 model Event {
   id          String   @id @default(uuid())
   name        String
+  type        String  //private ou public
   description String
   place       String
   price       Float
@@ -42,6 +44,7 @@ model Ticket {
   userId     String
   paymentId  String
   status     String   // active ou inactive
+  number     Int      @unique
 
   event      Event    @relation(fields: [eventId], references: [id])
   user       User     @relation(fields: [userId], references: [id])
