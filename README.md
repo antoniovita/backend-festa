@@ -108,3 +108,6 @@ Payment & Ticket
 
 Relação: Um Payment pode estar associado a vários Ticket (campo tickets em Payment).
 Detalhe: Cada Ticket está vinculado a um único Payment (campo payment em Ticket, com a chave estrangeira paymentId).
+
+type: private => pix
+type: public => pix or card

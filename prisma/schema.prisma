@@ -11,9 +11,11 @@ model User {
   id       String   @id @default(uuid())
   email    String   @unique
   password String
-  type     String   // owner ou user
+  cpf      Int
+  type     String   // owner ou user ou adm
   phone    String?
   name     String
+  username String   @unique
   imgUrl   String?
 
   events   Event[]  @relation("EventOwner")
@@ -25,10 +27,15 @@ model Event {
   id          String   @id @default(uuid())
   name        String
   description String
+  date        DateTime
   place       String
+  status      String   //inactive ou active
   price       Float
+  startTime   DateTime
+  endTime     DateTime
   quantity    Int      // quantidade total de ingressos
   ownerId     String
+  type        String   //public ou private
   imgUrl      String
   owner       User     @relation("EventOwner", fields: [ownerId], references: [id])
   
@@ -41,6 +48,7 @@ model Ticket {
   eventId    String
   userId     String
   paymentId  String
+  number     Int      @unique
   status     String   // active ou inactive
 
   event      Event    @relation(fields: [eventId], references: [id])
