@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "es2016",                                  /* Versão do JavaScript gerada */
+    "module": "commonjs",                                /* Sistema de módulos: CommonJS para Node.js */
+    "rootDir": "./src",                                  /* Pasta raiz dos arquivos fonte */
+    "outDir": "./dist",                                  /* Pasta de saída dos arquivos compilados */
+    "esModuleInterop": true,                             /* Habilita interoperação entre módulos CommonJS e ESModules */
+    "allowSyntheticDefaultImports": true,                /* Permite importações padrão mesmo sem exportação default */
+    "strict": true,                                      /* Ativa todas as checagens estritas de tipo */
+    "forceConsistentCasingInFileNames": true,            /* Garante que a importação de arquivos respeite a caixa (case sensitive) */
+    "skipLibCheck": true,                                /* Pula a checagem de arquivos de declaração (.d.ts) */
+    "resolveJsonModule": true,                           /* Permite importar arquivos .json */
+    "moduleResolution": "node",                          /* Usa o algoritmo de resolução de módulos do Node.js */
+    "noImplicitReturns": true,                           /* Gera erro se nem todos os caminhos de função retornarem um valor */
+    "noUnusedLocals": true,                              /* Gera erro para variáveis locais não utilizadas */
+    "noUnusedParameters": true,                          /* Gera erro para parâmetros não utilizados */
+    "sourceMap": true                                    /* Gera arquivos de source map para depuração */
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}
