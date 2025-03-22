@@ -27,10 +27,10 @@ export class PaymentController {
         },
       });
 
-      return res.status(201).json({ clientSecret: paymentIntent.client_secret });
+   res.status(201).json({ clientSecret: paymentIntent.client_secret });
     } catch (error) {
       console.error("Erro ao criar Payment Intent:", error);
-      return res.status(500).json({ message: "Erro ao criar Payment Intent", error });
+   res.status(500).json({ message: "Erro ao criar Payment Intent", error });
     }
   };
 
@@ -48,10 +48,10 @@ export class PaymentController {
           date: dateTime,
         },
       });
-      return res.status(201).json(payment);
+   res.status(201).json(payment);
     } catch (error) {
       console.error("Erro ao criar registro de pagamento:", error);
-      return res.status(500).json({ error: "Erro ao criar registro de pagamento." });
+   res.status(500).json({ error: "Erro ao criar registro de pagamento." });
     }
   };
 
@@ -59,19 +59,19 @@ export class PaymentController {
   static getAllPayments = async (req: Request, res: Response) => {
     const auth = (req as any).user;
     if (!auth) {
-      return res.status(401).json({ error: 'Usuário não autenticado.' });
+   res.status(401).json({ error: 'Usuário não autenticado.' });
     }
 
     const adm = await prisma.user.findUnique({ where: { id: auth.id } });
     if (!adm) {
-      return res.status(404).json({ error: 'Usuário não encontrado.' });
+   res.status(404).json({ error: 'Usuário não encontrado.' });
     }
 
     if (adm.type === "adm") {
       const payments = await prisma.payment.findMany();
-      return res.status(200).json(payments);
+   res.status(200).json(payments);
     } else {
-      return res.status(403).json({ error: 'Acesso negado. Somente administradores podem acessar os pagamentos.' });
+   res.status(403).json({ error: 'Acesso negado. Somente administradores podem acessar os pagamentos.' });
     }
   };
 
@@ -80,11 +80,11 @@ export class PaymentController {
     try {
       const auth = (req as any).user;
       if (!auth) {
-        return res.status(401).json({ error: 'Usuário não autenticado.' });
+     res.status(401).json({ error: 'Usuário não autenticado.' });
       }
       const adm = await prisma.user.findUnique({ where: { id: auth.id } });
       if (!adm) {
-        return res.status(404).json({ error: 'Usuário não encontrado.' });
+     res.status(404).json({ error: 'Usuário não encontrado.' });
       }
 
       if (adm.type === "adm") {
@@ -95,16 +95,16 @@ export class PaymentController {
         });
 
         if (!payment) {
-          return res.status(404).json({ error: "Pagamento não encontrado." });
+       res.status(404).json({ error: "Pagamento não encontrado." });
         }
 
-        return res.status(200).json(payment);
+     res.status(200).json(payment);
       } else {
-        return res.status(403).json({ error: 'Acesso negado. Somente administradores podem acessar os pagamentos.' });
+     res.status(403).json({ error: 'Acesso negado. Somente administradores podem acessar os pagamentos.' });
       }
     } catch (error) {
       console.error("Erro ao buscar o pagamento:", error);
-      return res.status(500).json({ error: "Erro ao buscar pagamento" });
+   res.status(500).json({ error: "Erro ao buscar pagamento" });
     }
   };
 }

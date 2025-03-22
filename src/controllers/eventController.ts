@@ -55,7 +55,7 @@ export class EventController {
     }
   }
 
-  static async getAllEvents(req: Request, res: Response) {
+  static async getAllEvents(_req: Request, res: Response) {
     try {
       const events = await prisma.event.findMany({ where: { type: 'public' } });
       return res.status(200).json(events);

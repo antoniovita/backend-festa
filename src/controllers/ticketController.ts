@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 export class TicketController {
 
 //falta o pagamento
-    static async createTicket(paymentId: number, userId: number, eventId: number, quantity: number, number: number, status: string) {
+    static async createTicket(paymentId: number, userId: number, eventId: number, quantity: number, status: string) {
         try {
             const number = uuidv4();
             const tickets = await prisma.ticket.create({
@@ -67,9 +67,10 @@ export class TicketController {
             
             if(auth.type === 'adm'){
                 const ticket = await prisma.ticket.delete({where: id})
+                return res.status(200).json({message: 'Ticket deletado com sucesso.', ticket})
             }
-
-            return res.status(200).json({message: 'Ticket deletado com sucesso.'})
+            
+            return res.status(401).json({message: 'Acesso negado.'})
 
         } catch (error) {
             return res.status(500).json({ error: 'Erro ao deletar ticket' });   
