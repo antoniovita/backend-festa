@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import Stripe from 'stripe';
+import { TicketController } from './ticketController';
 
 const prisma = new PrismaClient();
 
@@ -39,7 +40,10 @@ export class PaymentController {
         },
       });
 
-   res.status(201).json({ clientSecret: paymentIntent.client_secret, paymentRecord });
+      // FALTA FAZER ISSO AQUI
+      const ticket = await TicketController.createTicket({});
+
+   res.status(201).json({ clientSecret: paymentIntent.client_secret, paymentRecord, ticket});
    return;
     } catch (error) {
       console.error("Erro ao criar Payment Intent:", error);

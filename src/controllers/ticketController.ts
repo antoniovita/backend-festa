@@ -7,21 +7,24 @@ const prisma = new PrismaClient();
 export class TicketController {
 
 //falta o pagamento
-    static async createTicket(paymentId: number, userId: number, eventId: number, quantity: number, status: string) {
+    static async createTicket(req: Request, res: Response) {
         try {
-            const number = uuidv4();
-            const tickets = await prisma.ticket.create({
-                data: Array.from({ length: quantity }, () => ({
-                    paymentId,
-                    userId,
-                    eventId,
-                    number,
-                    status
-                }))
-            });
-            return tickets;
+            const { paymentId, userId, eventId, status } = req.body;
+            const ticket = await prisma.ticket.create({
+                data: {
+                  paymentId,
+                  userId,
+                  eventId,
+                  number: uuidv4(),
+                  status
+                }
+              });
+              res.status(201).json(ticket);
+              return;
         } catch (error) {
-            throw new Error('Erro ao criar tickets');
+            console.error("Erro ao criar ticket:", error);
+            res.status(500).json({ error: 'Erro ao criar ticket' });
+            return;
         }
     }
 
@@ -30,14 +33,17 @@ export class TicketController {
         try {
             const auth = (req as any).user;
             if (!auth) {
-              return res.status(401).json({ error: 'Usuário não autenticado.' });
+              res.status(401).json({ error: 'Usuário não autenticado.' });
+              return;
             }
 
             const userId = auth.id;
             const tickets = await prisma.ticket.findMany({ where: { userId } });
-            return res.status(200).json(tickets);
+            res.status(200).json(tickets);
+            return;
         } catch (error) {
-            return res.status(500).json({ error: 'Erro ao buscar tickets' });
+            res.status(500).json({ error: 'Erro ao buscar tickets' });
+            return;
         }
     }
 
@@ -47,11 +53,13 @@ export class TicketController {
             const { id } = req.params;
             const ticket = await prisma.ticket.findUnique({ where: { id: Number(id) } });
             
-            if (!ticket) return res.status(404).json({ error: 'Ticket não encontrado' });
+            if (!ticket) res.status(404).json({ error: 'Ticket não encontrado' });
+            return;
             
-            return res.status(200).json(ticket);
+            res.status(200).json(ticket);
         } catch (error) {
-            return res.status(500).json({ error: 'Erro ao buscar ticket' });
+            res.status(500).json({ error: 'Erro ao buscar ticket' });
+            return;
         }
     }
 
@@ -60,24 +68,28 @@ export class TicketController {
         try {
             const auth = (req as any).user;
             if (!auth) {
-              return res.status(401).json({ error: 'Usuário não autenticado.' });
+              res.status(401).json({ error: 'Usuário não autenticado.' });
+              return;
             }
 
             const { id } = req.params;
             
             if(auth.type === 'adm'){
                 const ticket = await prisma.ticket.delete({where: id})
-                return res.status(200).json({message: 'Ticket deletado com sucesso.', ticket})
+                res.status(200).json({message: 'Ticket deletado com sucesso.', ticket})
+                return;
             }
             
-            return res.status(401).json({message: 'Acesso negado.'})
+            res.status(401).json({message: 'Acesso negado.'})
+            return;
 
         } catch (error) {
-            return res.status(500).json({ error: 'Erro ao deletar ticket' });   
+            res.status(500).json({ error: 'Erro ao deletar ticket' });   
+            return;
         }
     }
 
-    // expire ticket usando cron job node com node cron FALTA FAZER
+    // expire ticket usando cron job node com node cron 
     static async expireTicket(req: Request, res: Response) {
         try {
             const { eventId } = req.body;
@@ -90,7 +102,8 @@ export class TicketController {
             });
     
             if (!event) {
-                return res.status(404).json({ error: 'Evento não encontrado.' });
+                res.status(404).json({ error: 'Evento não encontrado.' });
+                return;
             }
     
             // Verifica se o evento já terminou
@@ -101,13 +114,16 @@ export class TicketController {
                     data: { status: 'expired' },
                 });
     
-                return res.status(200).json({ message: 'Tickets expirados com sucesso.' });
+                res.status(200).json({ message: 'Tickets expirados com sucesso.' });
+                return;
             }
-    
-            return res.status(400).json({ error: 'O evento ainda não terminou, tickets não expirados.' });
+
+            res.status(400).json({ error: 'O evento ainda não terminou, tickets não expirados.' });
+            return;
         } catch (error) {
             console.error('Erro ao expirar tickets:', error);
-            return res.status(500).json({ error: 'Erro ao expirar tickets depois do tempo da festa.' });
+            res.status(500).json({ error: 'Erro ao expirar tickets depois do tempo da festa.' });
+            return;
         }
     }
 }
