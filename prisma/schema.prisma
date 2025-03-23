@@ -36,7 +36,7 @@ model Event {
   quantity    Int      // quantidade total de ingressos
   ownerId     String
   type        String   //public ou private
-  imgUrl      String
+  imgUrl      String?
   owner       User     @relation("EventOwner", fields: [ownerId], references: [id])
   
   tickets     Ticket[]
@@ -48,8 +48,9 @@ model Ticket {
   eventId    String
   userId     String
   paymentId  String
-  number     Int      @unique
+  number     String      @unique
   status     String   // active ou inactive
+  date     DateTime   @default(now())
 
   event      Event    @relation(fields: [eventId], references: [id])
   user       User     @relation(fields: [userId], references: [id])

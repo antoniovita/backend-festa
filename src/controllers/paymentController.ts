@@ -40,8 +40,12 @@ export class PaymentController {
         },
       });
 
-      // FALTA FAZER ISSO AQUI
-      const ticket = await TicketController.createTicket({});
+      const ticket = await TicketController.createTicketForPayment(
+        paymentRecord.id,
+        userId,
+        eventId,
+        "active"
+      );
 
    res.status(201).json({ clientSecret: paymentIntent.client_secret, paymentRecord, ticket});
    return;

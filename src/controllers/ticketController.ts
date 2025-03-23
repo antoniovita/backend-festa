@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 export class TicketController {
 
-//falta o pagamento
+//cria ingresso sem pagamento
     static async createTicket(req: Request, res: Response) {
         try {
             const { paymentId, userId, eventId, status } = req.body;
@@ -16,7 +16,8 @@ export class TicketController {
                   userId,
                   eventId,
                   number: uuidv4(),
-                  status
+                  status,
+                  date: new Date()
                 }
               });
               res.status(201).json(ticket);
@@ -27,6 +28,26 @@ export class TicketController {
             return;
         }
     }
+
+// utilizada quando chamamos a funcao createPayment no paymentController
+    static async createTicketForPayment( paymentId: string, userId: string, eventId: string, status: string ): Promise<any> {
+        try {
+          const ticket = await prisma.ticket.create({
+            data: {
+              paymentId,
+              userId,
+              eventId,
+              number: uuidv4(),
+              status,
+              date: new Date()
+            }
+          });
+          return ticket;
+        } catch (error) {
+          console.error("Erro ao criar ticket:", error);
+          throw new Error('Erro ao criar ticket');
+        }
+      }
 
 //get tickets pegando o id do usuario pelo auth
     static async getUserTickets(req: Request, res: Response) {
@@ -51,10 +72,12 @@ export class TicketController {
     static async getTicketById(req: Request, res: Response) {
         try {
             const { id } = req.params;
-            const ticket = await prisma.ticket.findUnique({ where: { id: Number(id) } });
+            const ticket = await prisma.ticket.findUnique({ where: { id } });
             
-            if (!ticket) res.status(404).json({ error: 'Ticket não encontrado' });
-            return;
+            if (!ticket) {
+                res.status(404).json({ error: 'Ticket não encontrado' });
+                return
+            };
             
             res.status(200).json(ticket);
         } catch (error) {
@@ -75,12 +98,12 @@ export class TicketController {
             const { id } = req.params;
             
             if(auth.type === 'adm'){
-                const ticket = await prisma.ticket.delete({where: id})
+                const ticket = await prisma.ticket.delete({where: {id} })
                 res.status(200).json({message: 'Ticket deletado com sucesso.', ticket})
                 return;
             }
             
-            res.status(401).json({message: 'Acesso negado.'})
+            res.status(403).json({message: 'Acesso negado.'})
             return;
 
         } catch (error) {

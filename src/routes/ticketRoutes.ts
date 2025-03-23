@@ -4,7 +4,7 @@ import authenticate from '../middlewares/authMiddleware';
 
 const router = Router();
 
-// nao precisa de uma createTicket já que ela funciona automaticamente quando há o pagamento na createPayment
+// cria ticket avulso sem pagamento
 router.post('/createTicket', TicketController.createTicket)
 
 // rota para o usuário autenticado ver seus tickets

@@ -42,12 +42,13 @@ export class UserController {
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
+      const cpfNumber = Number(cpf);
       
       const user = await prisma.user.create({
         data: {
           email,
           password: hashedPassword,
-          cpf,
+          cpf: cpfNumber,
           phone,
           username,
           name,
