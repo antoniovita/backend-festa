@@ -15,25 +15,30 @@ export class UserController {
     try {
       const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
       if (!emailRegex.test(email)) {
-        return res.status(400).json({ error: 'Formato de email inválido.' });
+         res.status(400).json({ error: 'Formato de email inválido.' });
+         return;
       }
 
       if (!cpf || cpf.toString().length !== 11) {
-        return res.status(400).json({ error: 'CPF inválido. Deve conter 11 dígitos.' });
+         res.status(400).json({ error: 'CPF inválido. Deve conter 11 dígitos.' });
+         return;
       }
 
       if (!password || password.length < 6) {
-        return res.status(400).json({ error: 'A senha deve ter pelo menos 6 caracteres.' });
+         res.status(400).json({ error: 'A senha deve ter pelo menos 6 caracteres.' });
+         return;
       }
 
       const usernameFind = await prisma.user.findFirst({ where: { username } });
       if (usernameFind) {
-        return res.status(400).json({ error: 'Username já em uso.' });
+         res.status(400).json({ error: 'Username já em uso.' });
+         return;
       }
 
       const emailFind = await prisma.user.findUnique({ where: { email } });
       if (emailFind) {
-        return res.status(400).json({ error: 'Email já está em uso.' });
+         res.status(400).json({ error: 'Email já está em uso.' });
+         return;
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -64,10 +69,12 @@ export class UserController {
         sameSite: 'strict'
       });
 
-      return res.status(201).json({ user, token });
+       res.status(201).json({ user, token });
+       return;
     } catch (error) {
       console.error("Erro ao registrar usuário:", error);
-      return res.status(500).json({ error: 'Erro ao registrar usuário.' });
+       res.status(500).json({ error: 'Erro ao registrar usuário.' });
+       return;
     }
   }
 
@@ -77,22 +84,26 @@ export class UserController {
       const { email, password } = req.body;
       
       if (!email || !password) {
-        return res.status(400).json({ error: "Email e senha são campos obrigatórios." });
+         res.status(400).json({ error: "Email e senha são campos obrigatórios." });
+         return;
       }
       
       const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
       if (!emailRegex.test(email)) {
-        return res.status(400).json({ error: 'Formato de email inválido.' });
+         res.status(400).json({ error: 'Formato de email inválido.' });
+         return;
       }
       
       const user = await prisma.user.findUnique({ where: { email } });
       if (!user) {
-        return res.status(404).json({ error: "Usuário não encontrado." });
+         res.status(404).json({ error: "Usuário não encontrado." });
+         return;
       }
       
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return res.status(401).json({ error: "Credenciais inválidas." });
+         res.status(401).json({ error: "Credenciais inválidas." });
+         return;
       }
       
       const token = jwt.sign(
@@ -108,10 +119,12 @@ export class UserController {
         sameSite: 'strict'
       });
       
-      return res.status(200).json({ token });
+       res.status(200).json({ token });
+       return;
     } catch (error) {
       console.error("Erro no login:", error);
-      return res.status(500).json({ error: "Erro interno do servidor." });
+       res.status(500).json({ error: "Erro interno do servidor." });
+       return;
     }
   }
 
@@ -121,10 +134,12 @@ export class UserController {
       const { id } = req.params;
       const auth = (req as any).user;
       if (!auth) {
-        return res.status(401).json({ error: "Usuário não autenticado." });
+         res.status(401).json({ error: "Usuário não autenticado." });
+         return;
       }
       if (auth.id !== id) {
-        return res.status(403).json({ error: "Acesso não autorizado." });
+         res.status(403).json({ error: "Acesso não autorizado." });
+         return;
       }
 
       const { name, phone, imgUrl } = req.body;
@@ -138,16 +153,19 @@ export class UserController {
         },
       });
 
-      return res.status(200).json(updatedUser);
+       res.status(200).json(updatedUser);
+       return;
     } catch (error) {
       console.error("Erro ao atualizar usuário:", error);
-      return res.status(500).json({ error: "Erro ao atualizar usuário." });
+       res.status(500).json({ error: "Erro ao atualizar usuário." });
+       return;
     }
   };
 
   static logoutUser = (_req: Request, res: Response) => {
     res.clearCookie('token');
-    return res.status(200).json({ message: "Logout realizado com sucesso." });
+     res.status(200).json({ message: "Logout realizado com sucesso." });
+     return;
   }
 
 }

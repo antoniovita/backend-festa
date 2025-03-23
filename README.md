@@ -117,3 +117,11 @@ influencer:
 
 type: private => pix
 type: public => pix or card
+
+
+ideia:
+liberar criação de eventos do type 'free':
+a ideia seria liberar a criação de eventos gratuitos que a pessoa poderia utilizar o serviço apenas como controle de lista de autenticação das pessoas ai a gnt receberia por meio de uma taxa unica
+por exemplo: pagar 80 reais para ter esse sistema de entrada: já vi mt festa de quinze usando isso, festa de brenda cortes funcionou assim, isso seria bom tbm para pessoas que vao fzr uma resenha de graça mas querem usar o serviço para deixar mais organizado.
+
+pode ser algo mais aberto essa ideia, mas n deixa de ser uma possibilidade.
