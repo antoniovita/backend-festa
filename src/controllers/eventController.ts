@@ -20,7 +20,7 @@ export class EventController {
     }
 
     try {
-      const { name, description, place, price, quantity, type, date, startTime, endTime, imgUrl } = req.body;
+      const { name, description, place, price, quantity, type, date, startTime, endTime } = req.body;
 
       const parsedDate = new Date(date);
       if (isNaN(parsedDate.getTime())) {
@@ -43,6 +43,9 @@ export class EventController {
          return;
       }
 
+      const uploadedImgUrl = req.file?.filename ? `/uploads/${req.file.filename}` : null;
+
+
       const event = await prisma.event.create({
         data: {
           name,
@@ -56,7 +59,7 @@ export class EventController {
           status: 'active',
           startTime: parsedStartTime,
           endTime: parsedEndTime,
-          imgUrl
+          imgUrl: uploadedImgUrl
         },
       });
       
@@ -133,6 +136,10 @@ export class EventController {
         }
 
         const ownerId = eventFind.ownerId;
+
+
+      const uploadedImgUrl = req.file?.filename ? `/uploads/${req.file.filename}` : null;
+
       const { name, description, place, price, date, quantity, startTime, endTime } = req.body;
 
       const parsedDate = new Date(date);
@@ -159,7 +166,7 @@ export class EventController {
 
       const event = await prisma.event.update({
         where: { id },
-        data: { name, description, place, price, quantity, date: parsedDate, startTime: parsedStartTime, endTime: parsedEndTime },
+        data: { name, description, place, price, quantity, date: parsedDate, startTime: parsedStartTime, endTime: parsedEndTime, imgUrl: uploadedImgUrl},
       });
 
        res.status(200).json(event);
